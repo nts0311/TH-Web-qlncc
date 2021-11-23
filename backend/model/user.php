@@ -8,6 +8,7 @@ Class User{
     private $phone;
     private $email;
     private $address;
+    private $position;
 
     // public function __construct($username, $password, $name, $phone,$email,$address)
     // {
@@ -106,6 +107,18 @@ Class User{
     public function setAddress($address)
     {
         $this->address = $address;
+
+        return $this;
+    }
+    
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    public function setPosition($position)
+    {
+        $this->position = $position;
 
         return $this;
     }
