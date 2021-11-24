@@ -8,10 +8,10 @@
     <title>Trang quản trị</title>
 
     <link rel="stylesheet" href="./js/lib/bootstrap.4.0.0.min.css"crossorigin="anonymous">
-    <script src="./js/lib/jquery-3.2.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="./js/lib/jquery-3.2.1.js" crossorigin="anonymous"></script>
     <script src="./js/lib/popper.min.js" crossorigin="anonymous"></script>
     <script src="./js/lib/bootstrap.min.js" crossorigin="anonymous"></script>
-    <script src="./js/lib/jquery-3.6.0.js" crossorigin="anonymous"></script>
+    <!-- <script src="./js/lib/jquery-3.6.0.js" crossorigin="anonymous"></script> -->
 </head>
 
 <body>
@@ -91,26 +91,26 @@
                     <h5 class="modal-title" id="suplierModalLabel">Modal title</h5>
                 </div>
                 <div class="modal-body">
-                    <form class="">
+                    <form id="supplierModalForm" class="" method="post" action="../backend/controller/SuppliersController.php">
                         <div class="form-group">
                             <label for="modalSuppName">Tên</label>
-                            <input type="text" class="form-control" id="modalSuppName" placeholder="">
+                            <input type="text" class="form-control" name="name">
                         </div>
                         <div class="form-group">
                             <label for="modalSuppCate">Danh mục</label>
-                            <input type="text" class="form-control" id="modalSuppCate" placeholder="">
+                            <input type="text" class="form-control" name="category">
                         </div>
                         <div class="form-group">
                             <label for="modalSuppPhone">Điện thoại</label>
-                            <input type="text" class="form-control" id="modalSuppPhone" placeholder="">
+                            <input type="text" class="form-control" name="phone">
                         </div>
                         <div class="form-group">
                             <label for="modalSuppEmail">Email</label>
-                            <input type="email" class="form-control" id="modalSuppEmail" placeholder="">
+                            <input type="email" class="form-control" name="email">
                         </div>
                         <div class="form-group">
                             <label for="modalSuppAddress">Địa chỉ</label>
-                            <input type="text" class="form-control" id="modalSuppAddress" placeholder="">
+                            <input type="text" class="form-control" name="address">
                         </div>
                     </form>
                 </div>
@@ -126,7 +126,7 @@
         <h4>2021 coppyright</h4>
     </footer>
 
-    <script src="./js/suplier.js"></script>
+    <script src="./js/suplier_management.js"></script>
 </body>
 
 </html>

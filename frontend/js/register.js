@@ -25,9 +25,10 @@ $("#register_form").submit(function (event) {
             address: address,
             func: 'register_user'
         },
-        success: function (result) {
+        success: function (response) {
+            console.log(response)
+            var result = JSON.parse(response)
             console.log(result)
-            var result = JSON.parse(result)
             alert(result["msg"])
         }
     })

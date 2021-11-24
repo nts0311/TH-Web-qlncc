@@ -5,6 +5,8 @@ require("../dao/userdao.php");
 //ini_set('display_errors', 1);
 error_reporting(E_ERROR | E_PARSE);
 
+session_start();
+
 $func = $_POST['func'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -54,6 +56,7 @@ function loginUser()
         echo json_encode($result);
         return;
     } 
+
 
     $_SESSION['user_loggedin']=true;
     $_SESSION['user_id']=$user->getId();

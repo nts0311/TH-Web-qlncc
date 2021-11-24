@@ -24,10 +24,9 @@ class DbConnector
         return $this->conn;
     }
 
-    function dbquery($sql)
+    function query($sql)
     {
-        global $conn;
-        return mysqli_query($conn, $sql);
+        return $this->conn->query($sql);
     }
 
     private static $instance = NULL;
