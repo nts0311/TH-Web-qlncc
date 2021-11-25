@@ -23,6 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else if ($func === 'get_suppliers') {
         getSupplier();
     }
+    else if($func === 'delete_supplier')
+    {
+        removeSupplier();
+    }
+    else if($func === 'update_supplier'){
+        modifySupplier();
+    }
 } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
@@ -67,18 +74,35 @@ function getSupplier()
         array_push($response, $obj);
     }
 
-    // $obj = [
-    //     'id' => "asdf",
-    //     'name' => "asdf",
-    //     'category' => "asdf",
-    //     'phone' => "asdf",
-    //     'email' => "asdf",
-    //     'address' => "asdf",
-    //     'accountId' => 1
-    // ];
+    echo json_encode($response);
+}
 
-    // array_push($response, $obj);
-    // array_push($response, $obj);
+function removeSupplier()
+{
+    $supplierId=$_POST['supplierId'];
+    $result = deleteSupplier($supplierId);
+
+    $response=['msg'=>'Xóa nhà cung cấp thành công'];
+    if($result===FALSE)
+        $response=['error'=>1,'msg'=>'Lỗi khi xóa nhà cung cấp.'];
+
+    echo json_encode($response);
+}
+
+function modifySupplier()
+{
+    $supplier = new Supplier();
+    $supplier->setId($_POST['id']);
+    $supplier->setName($_POST['name']);
+    $supplier->setCategory($_POST['category']);
+    $supplier->setPhone($_POST['phone']);
+    $supplier->setEmail($_POST['email']);
+    $supplier->setAddress($_POST['address']);
+
+    $result = updateSupplier($supplier);
+
+    $response=['msg'=>'Cập nhập nhà cung cấp thành công'];
+    if($result===FALSE) $response=['error'=>1 , 'msg'=>'Lỗi cập nhập nhà cung cấp.'];
 
     echo json_encode($response);
 }

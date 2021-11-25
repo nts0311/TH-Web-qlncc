@@ -50,10 +50,54 @@ function insertSupplier(Supplier $supplier)
 
         $result = $ps->execute();
 
-        if($result===TRUE) 
+        if ($result === TRUE)
             return $ps->insert_id;
         else return -1;
     } catch (Exception $e) {
         return -1;
+    }
+}
+
+function deleteSupplier($supplierId)
+{
+    try {
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        $db = DbConnector::getInstance();
+        $conn = $db->getConnection();
+
+        $query = "DELETE FROM supplier WHERE id=?";
+        $ps = $conn->prepare($query);
+
+        $ps->bind_param("i", $supplierId);
+
+        return $ps->execute();
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+function updateSupplier(Supplier $supplier)
+{
+    try {
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        $db = DbConnector::getInstance();
+        $conn = $db->getConnection();
+
+        $query = "UPDATE supplier SET name=?, category=?, phone=?, email=?, address=? WHERE id=?";
+        $ps = $conn->prepare($query);
+
+        $ps->bind_param(
+            "sssssi",
+            $supplier->getName(),
+            $supplier->getCategory(),
+            $supplier->getPhone(),
+            $supplier->getEmail(),
+            $supplier->getAddress(),
+            $supplier->getId()
+        );
+
+        return $ps->execute();
+    } catch (Exception $e) {
+        return false;
     }
 }

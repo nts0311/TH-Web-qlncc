@@ -1,6 +1,8 @@
 var supplierData = []
 var supplierTable = document.getElementById("suppliersTable")//$("#suppliersTable")
 var form = $("#supplierModalForm")
+$("#alert-info").hide()
+$("#alert-error").hide()
 var formElement = {
     'name': form.find('input[name="name"]').val(""),
     'category': form.find('input[name="category"]').val(""),
@@ -31,7 +33,7 @@ $(document).ready(function () {
 });
 
 $("#add_btn").click(function () {
-    
+
     $('#supplierModal').modal('show')
 
     formElement['name'].val("")
@@ -64,23 +66,37 @@ $("#add_btn").click(function () {
             },
             success: function (response) {
                 console.log(response)
-                alert(response['msg'])
+
+                $('#supplierModal').modal('hide')
+
                 if (response['error']) {
-                    
+                    //hien thong bao
+                    $("#alert-error-text").text(response['msg'])
+                    $("#alert-error").show()
+                    setTimeout(function () {
+                        $("#alert-error").hide()
+                    }, 3000)
                 }
                 else {
                     //them nha cung cap thanh cong
                     supplier['id'] = response['supplierId']
 
+                    //hien thong bao
+                    $("#alert-info-text").text(response['msg'])
+                    $("#alert-info").show()
+                    setTimeout(function () {
+                        $("#alert-info").hide()
+                    }, 3000)
+
                     //them vao bang
                     supplierData.push(supplier)
 
-                    var numRow=1
-                    if(supplierTable.rows) numRow = supplierTable.rows.length
+                    var numRow = 1
+                    if (supplierTable.rows) numRow = supplierTable.rows.length
 
                     insertSupplier(numRow, supplier)
 
-                    console.log('numrow '+numRow)
+                    console.log('numrow ' + numRow)
                     numRow++;
 
                     supplierTable.rows[numRow - 1].cells[6].childNodes[0].onclick = function () {
@@ -93,8 +109,6 @@ $("#add_btn").click(function () {
                         onDeleteSupplierClick(row.rowIndex - 1)
                     }
                 }
-                
-                $('#supplierModal').modal('hide')
             }
         })
     })
@@ -122,7 +136,9 @@ function loadSupplierData() {
     for (var i = 0; i < delBtns.length; i++) {
         delBtns[i].onclick = function () {
             var row = this.parentNode.parentNode
-            onDeleteSupplierClick(row.rowIndex - 1)
+            var index = row.rowIndex - 1
+
+            onDeleteSupplierClick(index, supplierData[index]['id'])
         }
     }
 
@@ -152,8 +168,8 @@ function insertSupplier(index, supplier) {
 
 function onEditSuppplierClick(index) {
     $('#supplierModal').modal('show')
-    $("#suplierModalLabel").innerHTML = "Sửa nhà cung cấp"
-    $("#modalSubmitBtn").innerHTML = "Xong"
+    $("#suplierModalLabel").text("Sửa nhà cung cấp")
+    $("#modalSubmitBtn").text("Xong")
 
     var supplier = supplierData[index]
 
@@ -172,17 +188,89 @@ function onEditSuppplierClick(index) {
 
         //call api
 
+        $.ajax({
+            type: 'POST',
+            url: '../backend/controller/SuppliersController.php',
+            data: {
+                id: supplier["id"],
+                name: supplier["name"],
+                category: supplier["category"],
+                email: supplier["email"],
+                phone: supplier["phone"],
+                address: supplier["address"],
+                func: 'update_supplier'
+            },
+            success: function (respnose) {
+                $('#supplierModal').modal('hide')
 
-
-        //sua thanh cong
-
-
-        supplierTable.rows[index + 1].cells[1].innerHTML = supplier["name"]
-        supplierTable.rows[index + 1].cells[2].innerHTML = supplier["category"]
-        supplierTable.rows[index + 1].cells[3].innerHTML = supplier["phone"]
-        supplierTable.rows[index + 1].cells[4].innerHTML = supplier["email"]
-        supplierTable.rows[index + 1].cells[5].innerHTML = supplier["address"]
-
-        $('#supplierModal').modal('hide')
+                if (respnose['error']) {
+                    showErrorAlert(respnose['msg'])
+                }
+                else {
+                    //sua thanh cong
+                    supplierTable.rows[index + 1].cells[1].innerHTML = supplier["name"]
+                    supplierTable.rows[index + 1].cells[2].innerHTML = supplier["category"]
+                    supplierTable.rows[index + 1].cells[3].innerHTML = supplier["phone"]
+                    supplierTable.rows[index + 1].cells[4].innerHTML = supplier["email"]
+                    supplierTable.rows[index + 1].cells[5].innerHTML = supplier["address"]
+                    showInforAlert(respnose['msg'])
+                }
+            }
+        })
     }
 }
+
+function showInforAlert(str) {
+    $("#alert-info-text").text(str)
+    $("#alert-info").show()
+    setTimeout(function () {
+        $("#alert-info").hide()
+    }, 3000)
+}
+
+function showErrorAlert(str) {
+    $("#alert-error-text").text(str)
+    $("#alert-error").show()
+    setTimeout(function () {
+        $("#alert-error").hide()
+    }, 3000)
+}
+
+function onDeleteSupplierClick(index, supplierId) {
+
+    console.log(supplierId)
+
+    //call api
+    $.ajax({
+        type: 'POST',
+        url: '../backend/controller/SuppliersController.php',
+        data: {
+            func: 'delete_supplier',
+            supplierId: supplierId
+        },
+        success: function (respnose) {
+            if (respnose['error']) {
+                showErrorAlert(respnose['msg'])
+            }
+            else {
+                supplierTable.deleteRow(index + 1)
+                supplierData.splice(index, 1)
+                showInforAlert(respnose['msg'])
+            }
+        }
+    })
+}
+
+$("#logout-btn").click(function()
+{
+    $.ajax({
+        type: 'POST',
+        url: '../backend/controller/UserController.php',
+        data: {
+            func: 'logout_user'
+        },
+        success: function (respnose) {
+            window.location.replace("login.html");
+        }
+    })
+})

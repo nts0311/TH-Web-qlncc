@@ -15,6 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else if ($func === 'login_user') {
         loginUser();
     }
+    else if($func === "logout_user")
+    {
+        logoutUser();
+    }
 } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
@@ -64,4 +68,12 @@ function loginUser()
     $_SESSION['user_data']=json_encode($user);
 
     echo json_encode($result);
+}
+
+function logoutUser()
+{
+    unset($_SESSION['user_loggedin']);
+    unset($_SESSION['user_id']);
+    unset($_SESSION['user_pos']);
+    unset($_SESSION['user_data']);
 }
