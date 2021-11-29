@@ -54,6 +54,7 @@ function insertSupplier(Supplier $supplier)
             return $ps->insert_id;
         else return -1;
     } catch (Exception $e) {
+        echo $e->getMessage();
         return -1;
     }
 }

@@ -33,7 +33,7 @@ $(document).ready(function () {
 });
 
 $("#add_btn").click(function () {
-
+    $("#suplierModalLabel").text("Thêm nhà cung cấp")
     $('#supplierModal').modal('show')
 
     formElement['name'].val("")
@@ -44,6 +44,7 @@ $("#add_btn").click(function () {
 
     $("#modalSubmitBtn").click(function () {
         var url = form.attr('action')
+        
 
         var supplier = {}
         supplier["name"] = formElement['name'].val()
@@ -160,7 +161,7 @@ function insertSupplier(index, supplier) {
     nameCell.innerHTML = supplier["name"]
     cateCell.innerHTML = supplier["category"]
     phonell.innerHTML = supplier["phone"]
-    emailCell.innerHTML = "<span class=\"badge badge-info\">" + supplier["email"] + "</span>"
+    emailCell.innerHTML = "<span class=\"badge badge-primary\">" + supplier["email"] + "</span>"
     addressCell.innerHTML = supplier["address"]
     editCell.innerHTML = "<button type=\"button\" class=\"btn btn-primary btn-edit-supplier\">Sửa</button>"
     delCell.innerHTML = "<button type='button' class='btn btn-danger btn-delete-supplier'>Xóa</button>"

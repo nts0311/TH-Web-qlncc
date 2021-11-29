@@ -11,7 +11,22 @@
     <script src="./js/lib/jquery-3.2.1.js" crossorigin="anonymous"></script>
     <script src="./js/lib/popper.min.js" crossorigin="anonymous"></script>
     <script src="./js/lib/bootstrap.min.js" crossorigin="anonymous"></script>
-    <!-- <script src="./js/lib/jquery-3.6.0.js" crossorigin="anonymous"></script> -->
+
+    <style>
+        progress[value]::-webkit-progress-bar {
+            background-color: lightgray;
+            border-radius: 10px;
+        }
+
+        progress[value]::-webkit-progress-value {
+            border-radius: 10px;
+            background-color: green;
+        }
+
+        progress::-webkit-progress-value {
+            background: blue;
+        }
+    </style>
 </head>
 
 <body>
@@ -85,14 +100,16 @@
         </div>
     </div>
 
-    <div id="alert-info" class="alert alert-info alert-dismissible fade show float-right" role="alert" style="position: fixed;bottom: 30px;right: 30px;">
+    <div id="alert-info" class="alert alert-info alert-dismissible fade show float-right" role="alert"
+        style="position: fixed;bottom: 30px;right: 30px;">
         <strong id="alert-info-text"></strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
 
-    <div id="alert-error" class="alert alert-danger alert-dismissible fade show float-right" role="alert" style="position: fixed;bottom: 30px;right: 30px;">
+    <div id="alert-error" class="alert alert-danger alert-dismissible fade show float-right" role="alert"
+        style="position: fixed;bottom: 30px;right: 30px;">
         <strong id="alert-error-text"></strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -137,10 +154,15 @@
                 </div>
             </div>
         </div>
+
+        
     </div>
 
-    <footer class="container-fluid text-center">
-        <h4>2021 coppyright</h4>
+    <hr class="featurette-divider" style="margin-top: 0;">
+
+    <footer class="container">
+        <p class="float-right"><a href="#">Lên đầu trang</a></p>
+        <p>&copy; 2021-2022 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
     </footer>
 
     <script src="./js/suplier_management.js"></script>
