@@ -1,4 +1,5 @@
 var supplierData = []
+var supplierDataFull = []
 var supplierTable = document.getElementById("suppliersTable")//$("#suppliersTable")
 var form = $("#supplierModalForm")
 $("#alert-info").hide()
@@ -11,8 +12,70 @@ var formElement = {
     'address': form.find('input[name="address"]').val("")
 }
 
+//Tim kiem
+$("#searchSupp").keyup(function () {
+    $(this).blur();
+    $(this).focus();
+});
+
+$("#searchSupp").change(function () {
+    deleteTable()
+
+    var text = $('#searchSupp').val()
+    
+    if (text.length == 0) {
+        loadSuppliersDataFromApi()
+    }
+    else {
+        console.log(text)
+        var filteredSupp = []
+        supplierDataFull.forEach(supplier => {
+            var str = stringToASCII(supplier["name"].toLowerCase()) + ' ' 
+            + stringToASCII(supplier["category"].toLowerCase()) + ' ' 
+            + stringToASCII(supplier["email"].toLowerCase()) + ' ' 
+            + stringToASCII(supplier["phone"].toLowerCase()) + ' ' 
+            + stringToASCII(supplier["address"].toLowerCase())
+
+            if (str.includes(stringToASCII(text.toLowerCase()))) {
+                filteredSupp.push(supplier)
+            }
+
+        })
+
+        supplierData = filteredSupp;
+        loadSupplierData()
+    }
+});
+
+function stringToASCII(str) {
+    try {
+        return str.replace(/[àáảãạâầấẩẫậăằắẳẵặ]/g, 'a')
+            .replace(/[èéẻẽẹêềếểễệ]/g, 'e')
+            .replace(/[đ]/g, 'd')
+            .replace(/[ìíỉĩị]/g, 'i')
+            .replace(/[òóỏõọôồốổỗộơờớởỡợ]/g, 'o')
+            .replace(/[ùúủũụưừứửữự]/g, 'u')
+            .replace(/[ỳýỷỹỵ]/g, 'y')
+    } catch {
+        return ''
+    }
+}
+
+function deleteTable() {
+    var tableHeaderRowCount = 1;
+    var table = document.getElementById('suppliersTable');
+    var rowCount = table.rows.length;
+    for (var i = tableHeaderRowCount; i < rowCount; i++) {
+        table.deleteRow(tableHeaderRowCount);
+    }
+}
+
 //lay danh sach câc nha cung cap sau khi load trang
 $(document).ready(function () {
+    loadSuppliersDataFromApi()
+});
+
+function loadSuppliersDataFromApi() {
     $.ajax({
         type: 'POST',
         url: '../backend/controller/SuppliersController.php',
@@ -26,12 +89,14 @@ $(document).ready(function () {
             }
             else {
                 supplierData = respnose
+                supplierDataFull = supplierData
                 loadSupplierData()
             }
         }
     })
-});
+}
 
+//Them nha cung cap
 $("#add_btn").click(function () {
     $("#suplierModalLabel").text("Thêm nhà cung cấp")
     $('#supplierModal').modal('show')
@@ -44,7 +109,7 @@ $("#add_btn").click(function () {
 
     $("#modalSubmitBtn").click(function () {
         var url = form.attr('action')
-        
+
 
         var supplier = {}
         supplier["name"] = formElement['name'].val()
@@ -145,6 +210,8 @@ function loadSupplierData() {
 
     console.log('done load supp to table')
 }
+
+
 
 function insertSupplier(index, supplier) {
     var row = supplierTable.insertRow(index)
@@ -262,8 +329,7 @@ function onDeleteSupplierClick(index, supplierId) {
     })
 }
 
-$("#logout-btn").click(function()
-{
+$("#logout-btn").click(function () {
     $.ajax({
         type: 'POST',
         url: '../backend/controller/UserController.php',
